@@ -48,7 +48,7 @@ def summarize():
     return jsonify(data)
 
 @application.route('/resume-parser', methods=['POST'])
-def generateQuestions:
+def generate():
     resume = request.form['resume']
     questions = generate(resume)
     return jsonify({'questions': questions})
