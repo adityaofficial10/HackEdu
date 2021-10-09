@@ -36,7 +36,7 @@ def generateVocabulary(Text):
     punctuations = list(str(string.punctuation))
     stopwords = stopwords + punctuations
 
-    stopword_file = open("long_stopwords.txt", "r")
+    stopword_file = open("training_data/long_stopwords.txt", "r")
     lots_of_stopwords = []
 
     for line in stopword_file.readlines():
