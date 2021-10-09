@@ -3,6 +3,8 @@ import sys
 from flask import Flask, jsonify, make_response, redirect, request
 from flask_cors import CORS
 import nltk
+import tika
+tika.initVM()
 
 try:    
     nltk.download('stopwords')
@@ -27,6 +29,7 @@ elif os.environ.get('ENV') == 'prod':
 
 from text_summary import SummarizerNLTK
 from keyword_extractor import generateVocabulary
+from resume_parser import generate
 
 @application.route('/test')
 def test():
@@ -43,6 +46,12 @@ def summarize():
         'status': "Success"
     }
     return jsonify(data)
+
+@application.route('/resume-parser', methods=['POST'])
+def generateQuestions:
+    resume = request.form['resume']
+    questions = generate(resume)
+    return jsonify({'questions': questions})
 
 if __name__ == '__main__':
     application.run(host="0.0.0.0", port=5000)

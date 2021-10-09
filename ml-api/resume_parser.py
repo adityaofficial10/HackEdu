@@ -1,13 +1,18 @@
-import tika
-tika.initVM()
 from tika import parser  
-# opening pdf file
-parsed_pdf = parser.from_file("54089.pdf")
-  
-# saving content of pdf
-# you can also bring text only, by parsed_pdf['text'] 
-# parsed_pdf['content'] returns string 
-data = parsed_pdf['content'] 
-  
-# Printing of content 
-print(data)
+from question_generation.pipelines import pipeline
+
+nlp = pipeline("question-generation")
+
+def getTextFromPdf(resume):
+    parsed_pdf = parser.from_file(resume.path)
+    data = parsed_pdf['content'] 
+    return data
+
+def getQuestions(text):
+    data = getTextFromPdf()
+    return nlp(text)
+
+def generate(resume):
+    text = getTextFromPdf(resume=resume)
+    questions = getQuestions(text=text)
+    return questions
