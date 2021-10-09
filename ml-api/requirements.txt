@@ -1,2 +1,6 @@
 Flask==2.0.2
 Flask-Cors==3.0.1
+nltk==3.6.3
+numpy==1.21.2
+networkx==2.6.3
+scipy==1.7.1

@@ -1,8 +1,15 @@
 import os
 import sys
-
 from flask import Flask, jsonify, make_response, redirect, request
 from flask_cors import CORS
+import nltk
+
+try:    
+    nltk.download('stopwords')
+    nltk.download('punkt')
+except Exception as exp:
+    print(f" ERROR {exp}")
+    raise Exception("NLTK download failed")
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -16,10 +23,22 @@ if os.environ.get('ENV') is None:
 elif os.environ.get('ENV') == 'prod':
     application.debug = False
 
+from text_summary import SummarizerNLTK
 
 @application.route('/test')
-def health():
-    return "Success"
+def test():
+    return "Server running!"
+
+@application.route('/short-notes', methods=['POST'])
+def summarize():
+    text = request.form['text-stream']
+    summ = SummarizerNLTK().summary(text=text)
+    data = {
+        'summary': summ,
+        'status': "Success"
+    }
+    return jsonify(data)
+    
 
 if __name__ == '__main__':
     application.run(host="0.0.0.0", port=5000)
