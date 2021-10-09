@@ -1,5 +1,5 @@
 from tika import parser  
-from question_generation.pipelines import pipeline
+from pipelines import pipeline
 
 nlp = pipeline("question-generation")
 
