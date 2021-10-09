@@ -10,6 +10,7 @@ const jwt = require("jsonwebtoken");
 const {connectMongo} = require("./config/database");
 const {mongoURI} = require("./config/database");
 const UserSchema = require('./api/models/Users');
+const SummarySchema = require('./api/models/Summary');
 
 const app= express();
 
@@ -29,6 +30,7 @@ console.log("=> Connecting to MongoDB Atlas ...");
 connectMongo(mongoURI).then((connection)=>{
     //making models
     global.userModel = connection.model('User', UserSchema);
+    global.summaryModel = connection.model('User', SummarySchema);
 
     console.log("=> MongoDB Connected !!");
 
