@@ -7,6 +7,8 @@ import nltk
 try:    
     nltk.download('stopwords')
     nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('wordnet')
 except Exception as exp:
     print(f" ERROR {exp}")
     raise Exception("NLTK download failed")
@@ -24,21 +26,23 @@ elif os.environ.get('ENV') == 'prod':
     application.debug = False
 
 from text_summary import SummarizerNLTK
+from keyword_extractor import generateVocabulary
 
 @application.route('/test')
 def test():
     return "Server running!"
 
-@application.route('/short-notes', methods=['POST'])
+@application.route('/text-analyser', methods=['POST'])
 def summarize():
     text = request.form['text-stream']
     summ = SummarizerNLTK().summary(text=text)
+    keywords = generateVocabulary(Text=text)
     data = {
         'summary': summ,
+        'keywords': keywords,
         'status': "Success"
     }
     return jsonify(data)
-    
 
 if __name__ == '__main__':
     application.run(host="0.0.0.0", port=5000)
