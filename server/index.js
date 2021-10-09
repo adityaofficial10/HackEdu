@@ -11,6 +11,8 @@ const {connectMongo} = require("./config/database");
 const {mongoURI} = require("./config/database");
 const UserSchema = require('./api/models/Users');
 const SummarySchema = require('./api/models/Summary');
+const summary = require('./routes/summary')
+const user = require('./routes/user')
 
 const app= express();
 
@@ -44,3 +46,28 @@ connectMongo(mongoURI).then((connection)=>{
     });
 
 });
+
+// middleware to verify the logged in user by checking for token
+function validateUser(req,res,next){
+    jwt.verify(req.cookies.token,'secretKey', function(err,decoded){
+        if(err){
+            res.json({ code: 0, status: 'error', message: err.message, data: null});
+        }
+        else{
+            req.body.userId = decoded.id;
+            userModel.findById(decoded.id,function(err, userInfo){
+                if(err){
+                    console.log();(err);
+                    next();
+                }
+                else{
+                    req.body.userEmail = userInfo.email;
+                    next();
+                }
+            });
+        }
+    });
+}
+
+app.use('/user',user);
+app.use('/summarise',validateUser,summary);
