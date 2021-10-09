@@ -11,7 +11,8 @@ const {connectMongo} = require("./config/database");
 const {mongoURI} = require("./config/database");
 const UserSchema = require('./api/models/Users');
 const SummarySchema = require('./api/models/Summary');
-const summRoute = require('./routes/summary')
+const summary = require('./routes/summary')
+const user = require('./routes/user')
 
 const app= express();
 
@@ -68,5 +69,5 @@ function validateUser(req,res,next){
     });
 }
 
-
-app.use('/summarise',validateUser,summRoute);
+app.use('/user',user);
+app.use('/summarise',validateUser,summary);
